@@ -1,60 +1,106 @@
-# Oracle Performance Assessment Report
+# Oracle Performance Assessment Framework
 
-This repository explains how to create a full Oracle database performance assessment report for your own database or for a client environment.
+A practical and structured guide for performing Oracle database performance analysis and generating professional assessment reports.
 
-It covers the practical process of reviewing database health, identifying performance bottlenecks, documenting findings, and presenting clear recommendations in a professional report format.
+This repository provides a complete workflow used by DBAs in real environments, covering both **instance-level checks** and **advanced performance analysis**.
 
-## What you will learn
+---
 
-- How to assess SGA health
-- How to assess PGA pressure
-- How to review parsing and SQL reuse
-- How to investigate TEMP tablespace usage
-- How to summarize findings for technical teams and management
-- How to convert raw database checks into a professional assessment report
+## Guides
+
+### 1. Instance-Level Assessment
+[Oracle Instance Level Assessment](Oracle-Instance-Level-Assessment.md)
+
+Covers:
+- SGA (Buffer Cache, Shared Pool)
+- PGA Analysis
+- TEMP Tablespace Usage
+- Parsing and SQL Reuse
+- Memory health checks
+- Final assessment logic
+
+---
+
+### 2. Advanced Performance Analysis
+[Oracle Advanced Performance Analysis](Oracle-Advanced-Performance-Analysis.md)
+
+Covers:
+- Top SQL analysis
+- Wait events
+- Active sessions
+- Locking issues
+- I/O performance
+- Workarea (sort/hash) efficiency
+- Redo and commit behavior
+
+---
+
+## What You Will Learn
+
+- How to perform a complete Oracle performance assessment
+- How to identify real bottlenecks (not just metrics)
+- How to analyze memory, SQL, and workload behavior
+- How to convert findings into a professional report
+- How to troubleshoot production performance issues
+
+---
+
+## Assessment Approach
+
+The methodology used in this repository follows a structured approach:
+
+1. **Check memory (SGA & PGA)**
+2. **Analyze SQL behavior (parsing & reuse)**
+3. **Investigate TEMP usage**
+4. **Identify top SQL and workload patterns**
+5. **Analyze wait events and system bottlenecks**
+6. **Provide clear and actionable recommendations**
+
+---
+
+## Performance Checklist
+
+- [ ] SGA health checked  
+- [ ] PGA analyzed  
+- [ ] Parsing reviewed  
+- [ ] TEMP usage analyzed  
+- [ ] Top SQL identified  
+- [ ] Wait events analyzed  
+- [ ] Active sessions checked  
+- [ ] Locking issues verified  
+
+---
+
+## Important Note
+
+Most performance issues in Oracle are **not caused by memory shortage**, but by:
+
+- Inefficient SQL  
+- Excessive parsing  
+- Poor execution plans  
+- Heavy workload patterns  
+
+This repository focuses on identifying **root causes**, not just symptoms.
+
+---
+
+## Use Cases
+
+This framework can be used for:
+
+- Production database health checks  
+- Client performance assessment reports  
+- DBA daily monitoring  
+- Performance troubleshooting  
+- Interview preparation  
+
+---
 
 ## Repository Structure
 
-- `sql/` → SQL scripts used during the assessment
-- `docs/` → sample reports and report templates
-- `images/` → screenshots and visuals for documentation
-
-## Assessment Areas Covered
-
-- Buffer Cache
-- Shared Pool
-- Library Cache
-- SQL Area
-- Parsing Activity
-- PGA Usage
-- TEMP Tablespace Usage
-- Action Plan and Recommendations
-
-## Example Recommendation
-
-- **SGA checked:** No action required
-- **PGA checked:** Undersized for workload
-- **Action:** Increase `pga_aggregate_target` based on advisory output
-- **Parsing checked:** Excessive parsing detected
-- **Action:** Investigate bind variables, cursor reuse, and child cursors
-
-## Who is this repository for?
-
-- Oracle DBAs
-- Database Consultants
-- Infrastructure Teams
-- Performance Tuning Engineers
-- Anyone preparing Oracle health check or assessment documentation
-
-## How to use this repository
-
-1. Run the SQL scripts in the `sql/` folder
-2. Collect the outputs
-3. Review the findings by category
-4. Use the sample report structure from the `docs/` folder
-5. Prepare your final database performance assessment report
-
-## Notes
-
-This repository is intended for learning, reference, and practical field use.  
-Always validate parameter changes in line with your environment, workload, and change management process.
+```text
+Oracle-Performance-Assessment-Report/
+│
+├── Oracle-Instance-Level-Assessment.md
+├── Oracle-Advanced-Performance-Analysis.md
+├── README.md
