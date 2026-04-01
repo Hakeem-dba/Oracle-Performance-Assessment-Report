@@ -33,19 +33,18 @@ WHERE name IN ('db block gets','consistent gets','physical reads');
 ```
 ## Expected Result
 
-90% → Good
-
-80–90% → Acceptable
-< 80% → Needs investigation
+- 90% → Good
+- 80–90% → Acceptable
+- < 80% → Needs investigation
 
 ## Interpretation
-Low ratio may indicate more disk I/O
-Not sufficient alone for tuning
+- Low ratio may indicate more disk I/O
+- Not sufficient alone for tuning
 
 ## Action
 
-Do NOT increase buffer cache blindly
-Use V$DB_CACHE_ADVICE
+- Do NOT increase buffer cache blindly
+- Use V$DB_CACHE_ADVICE
 
 
 # 2. Data Dictionary Cache
