@@ -1,4 +1,4 @@
-# Oracle Performance Assessment – Step-by-Step Guide
+# Oracle Instance Performance Assessment – Step-by-Step Guide
 
 ## Objective
 This document provides a structured approach to assess Oracle database performance and identify bottlenecks.
