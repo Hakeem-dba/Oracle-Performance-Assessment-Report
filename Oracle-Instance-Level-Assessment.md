@@ -11,12 +11,12 @@ Each section includes:
 
 ---
 
-# 1. SGA (Buffer Cache) Health Check
+## 1. SGA (Buffer Cache) Health Check
 
-## Purpose
+### Purpose
 Evaluate how efficiently Oracle reads data from memory vs disk.
 
-## Query
+### Query
 ```sql
 SELECT
     SUM(CASE WHEN name IN ('db block gets','consistent gets') THEN value ELSE 0 END) AS logical_reads,
@@ -31,45 +31,45 @@ SELECT
 FROM v$sysstat
 WHERE name IN ('db block gets','consistent gets','physical reads');
 ```
-## Expected Result
+### Expected Result
 
 - 90% → Good
 - 80–90% → Acceptable
 - < 80% → Needs investigation
 
-## Interpretation
+### Interpretation
 - Low ratio may indicate more disk I/O
 - Not sufficient alone for tuning
 
-## Action
+### Action
 
 - Do NOT increase buffer cache blindly
 - Use V$DB_CACHE_ADVICE
 
 
-# 2. Data Dictionary Cache
+## 2. Data Dictionary Cache
 
-## Query
+### Query
 ```sql
 SELECT SUM(gets),
        SUM(getmisses),
        TRUNC((1-(SUM(getmisses)/SUM(gets)))*100)
 FROM v$rowcache;
 ```
-## Expected Result
+### Expected Result
 
 - 95% → Excellent
 - 90–95% → Acceptable
 - < 90% → Needs tuning
 
-## Interpretation
+### Interpretation
 Low ratio → shared pool may be undersized
 
-##Action
+###Action
 Increase shared_pool_size only if confirmed
 
-# 3. Library Cache (SQL Reuse)
-## Query
+## 3. Library Cache (SQL Reuse)
+### Query
 ```sql
 SELECT namespace,
        TRUNC(gethitratio * 100) AS hit_ratio,
@@ -78,19 +78,19 @@ SELECT namespace,
 FROM v$librarycache;
 ```
 
-## Expected Result
+### Expected Result
 - Hit Ratio > 90%
 - Reloads should be low
-## Interpretation
+### Interpretation
 - Low SQL AREA hit ratio → poor SQL reuse
 - High reloads → shared pool churn
-## Action
+### Action
 - Check bind variables
 - Check version count
 - Investigate child cursors
 
-# 4. Parsing Activity
-## Query
+## 4. Parsing Activity
+### Query
 ```sql
 SELECT 
     SUM(parse_calls) total_parse_calls,
@@ -99,12 +99,12 @@ SELECT
 FROM v$sql;
 ```
 
-## Expected Result
+### Expected Result
 - < 10% → Good
 - 10–30% → Moderate
 - 30% → Problem
 
-## Hard Parse Check
+### Hard Parse Check
 ```sql
 SELECT name, value
 FROM v$sysstat
@@ -114,38 +114,38 @@ WHERE name IN (
 );
 ```
 
-## Expected Result
+### Expected Result
 Hard parse ratio: 
 - < 1% → Excellent
 - 1-5% → Problem
 - > 5% → critical
 
-## Interpretation
+### Interpretation
 High parsing → CPU overhead
 
-##Action
+###Action
 - Use bind variables
 - Improve cursor reuse
 
-# 5. PGA (Memory for Sort/Hash)
-##Query
+## 5. PGA (Memory for Sort/Hash)
+###Query
 ```sql
 SELECT name, value
 FROM v$pgastat;
 ```
-## Expected Result
+### Expected Result
 - Cache Hit %	> 90%
 - Over Allocation	0
 
-## Interpretation
+### Interpretation
 - Low cache hit → spills to TEMP
 - High over allocation → PGA too small
 
-##Action
+###Action
 - Increase PGA if needed
 
-# 6. PGA Target Advisory
-## Query
+## 6. PGA Target Advisory
+### Query
 ```sql
 SELECT
     round(pga_target_for_estimate/1024/1024) target_mb,
@@ -155,18 +155,18 @@ FROM v$pga_target_advice
 ORDER BY pga_target_for_estimate;
 ```
 
-## Expected Result
+### Expected Result
 Choose value where:
 - Cache hit ~95–100%
 - Overalloc = 0
 
-## Action
+### Action
 ```sql
 ALTER SYSTEM SET pga_aggregate_target = <VALUE> SCOPE=BOTH;
 ```
 
-# 7. TEMP Tablespace Usage
-## Query
+## 7. TEMP Tablespace Usage
+### Query
 ```sql
 SELECT
     s.sid,
@@ -184,19 +184,19 @@ JOIN dba_tablespaces t
 ORDER BY mb_used DESC;
 ```
 
-## Expected Result
+### Expected Result
 - Moderate TEMP usage
 
-## Interpretation
+### Interpretation
 - High usage → sorts, hash joins, PGA shortage
 
-## Action
+### Action
 - Increase PGA
 - Tune SQL
 
 
-# 8. SGA Free Memory
-## Query
+## 8. SGA Free Memory
+### Query
 ```sql
 SELECT pool, name, bytes
 FROM v$sgastat
@@ -204,26 +204,26 @@ WHERE name = 'free memory'
 ORDER BY bytes DESC;
 ```
 
-## Expected Result
+### Expected Result
 - Some free memory available
-## Interpretation
+### Interpretation
 - No free memory → pressure
-## Action
+### Action
 - Do not increase SGA blindly
 
 
-# Final Assessment Logic
-## Case 1
+## Final Assessment Logic
+### Case 1
 
-### High parsing + low SQL reuse
+#### High parsing + low SQL reuse
 - → Fix SQL / bind variables
 
-## Case 2
+### Case 2
 
-### Low PGA cache hit + high TEMP
+#### Low PGA cache hit + high TEMP
 - → Increase PGA
 
-## Case 3
+### Case 3
 
-### Low buffer cache ratio
+#### Low buffer cache ratio
 - → Validate with DB cache advice
