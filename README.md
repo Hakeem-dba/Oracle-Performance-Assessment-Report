@@ -94,13 +94,3 @@ This framework can be used for:
 - Performance troubleshooting  
 - Interview preparation  
 
----
-
-## Repository Structure
-
-```text
-Oracle-Performance-Assessment-Report/
-│
-├── Oracle-Instance-Level-Assessment.md
-├── Oracle-Advanced-Performance-Analysis.md
-├── README.md
